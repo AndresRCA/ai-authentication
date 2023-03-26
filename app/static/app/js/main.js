@@ -1,37 +1,65 @@
-var mediaRecorder = null;
+const video = document.getElementById("video");
+const record = document.getElementById("record");
 
-navigator.mediaDevices.getUserMedia({ video: true })
-.then(function(stream) {
-  var video = document.getElementById("video");
-  video.srcObject = stream;
+let mediaRecorder;
+let chunks = [];
 
-  mediaRecorder = new MediaRecorder(stream);
-  mediaRecorder.ondataavailable = function(e) {
-      var url = window.URL.createObjectURL(e.data);
+navigator.mediaDevices
+  .getUserMedia({ video: true, audio: true })
+  .then((stream) => {
+    // video
+    video.srcObject = stream;
+    video.play();
+
+    // audio
+    mediaRecorder = new MediaRecorder(stream);
+    mediaRecorder.addEventListener("dataavailable", (event) => {
+      chunks.push(event.data);
+    });
+    mediaRecorder.addEventListener("stop", () => {
+      const blob = new Blob(chunks, { type: "audio/ogg; codecs=opus" });
+      chunks = [];
+
+      const url = URL.createObjectURL(blob);
+      audio.src = url;
+
+      // download the audio
       var a = document.createElement('a');
       a.href = url;
-      a.download = 'recorded.webm';
+      a.download = 'recording.ogg';
       document.body.appendChild(a);
       a.click();
-  };
-})
-.catch(function(err) {
-  console.log("An error occurred! " + err);
-});
+    });
+  })
+  .catch((err) => console.log(err));
 
-function startRecording() {
-  // Start recording
-  var video = document.getElementById("video");
-  video.play();
-  mediaRecorder.start();
-  console.log("Recording started");
+function takePhoto() {
+  const canvas = document.createElement("canvas");
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+
+  canvas.getContext("2d").drawImage(video, 0, 0);
+
+  const data = canvas.toDataURL("image/png");
+  
+  // Add this line to download the image
+  var a = document.createElement('a');
+  a.href = data;
+  a.download = 'photo.png';
+  document.body.appendChild(a);
+  a.click();
 }
 
-function stopRecording() {
-  // Stop recording
-  if (mediaRecorder.state === 'inactive') return
-  mediaRecorder.stop();
-  console.log("Recording stopped");
-  var video = document.getElementById("video");
-  video.pause();
+function recordVoice() {
+  if (mediaRecorder.state === "inactive") {
+    mediaRecorder.start();
+    record.textContent = "Stop";
+    // add recording animation
+    record.classList.add("active");
+  } else {
+    mediaRecorder.stop();
+    record.textContent = "Record";
+    // remove animation
+    record.classList.remove("active");
+  }
 }

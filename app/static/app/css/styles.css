@@ -43,3 +43,35 @@ video {
 .button:hover {
 background-color: #3e8e41; /* Dark green */
 }
+
+#record {
+  position: relative;
+}
+
+#record {
+  position: relative;
+}
+
+#record.active::before {
+  content: "";
+  position: absolute;
+  top: 20%;
+  left: calc(100% + 10px);
+  transform: translate(-50%, -50%);
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: red;
+  animation: pulse 1s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(1.2);
+    opacity: 0;
+  }
+}
