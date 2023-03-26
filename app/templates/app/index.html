@@ -1,0 +1,14 @@
+{% extends 'app/base.html' %}
+{% load static %}
+
+{% block body %}
+<h1>Webcam Access</h1>
+<video id="video" autoplay></video>
+<div class="button-container">
+  <button class="button" onclick="startRecording()">Start Recording</button>
+  <button class="button" onclick="stopRecording()">Stop Recording</button>
+</div>
+{% endblock %}
+{% block scripts_footer %}
+<script src="{% static 'app/js/main.js' %}"></script>
+{% endblock %}
