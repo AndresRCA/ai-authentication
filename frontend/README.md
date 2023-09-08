@@ -2,26 +2,55 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.0.1.
 
-## Development server
+## Development policies (**IMPORTANT TO FOLLOW**)
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+* File naming (and other types of naming): This project generally follows the rules proposed by angular themselves [here](https://angular.io/guide/styleguide#naming), so **please** do give the guidelines a glance, there's reasons for why following a convention and keeping consistency does great work for the team.
+* Naming convention for code: camelCase.
+* The use of **Route Guards** and **Resolvers** is a must if a route contains any sort of data that is either fetched or passed on by some mean, such as a query url parameter, regular parameter, or from an API.
+* **Route Guards** and **Resolvers** should be contained in their own scope, for example a **Guard** that is used globally in different components should be defined in `src/app/guards/`, while the ones that are used exclusively by a component should be defined within their own directory, let's say `src/app/components/card-viewer/` as an example.
+* The last point does not only apply to **Guards** and **Resolvers**, interfaces, services, and such other files should follow the same rule.
+* Pull requests are encouraged, and quality checking is a must. A codebase is a thing that extends as time goes on, let's keep keep it healthy.
 
-## Code scaffolding
+## NPM scripts
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+```bash
+# run in development mode
+$ npm run start
 
-## Build
+# run in production mode
+$ npm run start:prod
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+# build (The build artifacts will be stored in dist/)
+$ npm run build
 
-## Running unit tests
+# build as you develop
+$ npm run watch
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+# test execute the unit tests via Karma
+$ npm run test
+```
 
-## Running end-to-end tests
+---
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+## Project's layout
 
-## Further help
+![AI-Auth](./docs/ai-auth.png)
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+### Folder structure
+
+The following is a reduced version of the project's folder structure, it contains the key folders in order to understand more clearly how the application works.
+
+```bash
+ai-authentication
+└── src
+    └── app
+        ├── core
+        │   └── services
+        └── pages
+            ├── showcase
+            │   └── pages
+            └── error
+```
+
+* `app/pages`: As the name suggests it holds the pages for our `app-routing.module` routes, inside of it we have our `showcase` folder that in itself also has its own routing module.
+* `core`: Folder where singleton services are defined and used across all components.
