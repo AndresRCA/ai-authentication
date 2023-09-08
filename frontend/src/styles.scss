@@ -1,17 +1,9 @@
 /* You can add global styles to this file, and also import other style files */
-body {
+html, body {
   background-color: #f2f2f2;
   margin: 0;
+  height: 100%;
 }
 
-.spacer {
-  aspect-ratio: 960/300;
-  width: 100%;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
-}
-
-.image-layer {
-  background-image: url('./assets/svgs/image-layer-900x300.svg');
-}
+// global styles for ShowcaseComponent and any component used under the route /showcase
+@import './assets/scss/showcase.scss';

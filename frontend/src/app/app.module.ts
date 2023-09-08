@@ -8,6 +8,7 @@ import { ImageComponent } from './pages/showcase/pages/image/image.component';
 import { VoiceComponent } from './pages/showcase/pages/voice/voice.component';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { CoreModule } from './core/core.module';
 
 @NgModule({
   declarations: [
@@ -17,6 +18,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     VoiceComponent
   ],
   imports: [
+    CoreModule,
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule

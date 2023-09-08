@@ -20,27 +20,18 @@ export class ShowcaseComponent implements OnInit {
     private router: Router,
     private contexts: ChildrenOutletContexts,
     private route: ActivatedRoute
-  ) {
-    // // set showcaseRoutes to define the right order when navigating using the site
-    // showcaseRoutes.sort((a, b) => a.data!['animation'] - b.data!['animation']); // make sure the order is right
-    // this.showcaseRoutes = showcaseRoutes.map((route) => route.path as string);
+  ) { }
 
-    // // set currentAppIndex accordingly depending on what route is currently active
-    // this.activatedRoute.data.subscribe(data => {
-    //   console.log(data['animation'])
-    //   this.currentAppIndex = data['animation'];
-    // })
-  }
   ngOnInit(): void {
-    // set showcaseRoutes to define the right order when navigating using the site
+    console.log(this.contexts.getContext('primary')?.route?.snapshot?.data?.['animation'])
+    // set showcaseRoutes to define the right order when navigating while using the site
     showcaseRoutes.sort((a, b) => a.data!['animation'] - b.data!['animation']); // make sure the order is right
     this.showcaseRoutes = showcaseRoutes.map((route) => route.path as string);
 
-    // set currentAppIndex accordingly depending on what route is currently active
-    this.route.data.subscribe(data => {
-      console.log(data['animation'])
+    // get data from children routes to update component properties
+    this.route.children[0].data.subscribe(data => {
       this.currentAppIndex = data['animation'];
-    })
+    });
   }
 
   /**
