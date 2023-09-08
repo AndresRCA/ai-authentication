@@ -1,0 +1,10 @@
+<div class="uk-flex uk-flex-middle uk-flex-between">
+  <button class="uk-margin-small-left" [disabled]="currentAppIndex === 0" (click)="goToPreviousApp()">&lt;</button>
+  <div [@routeAnimations]="getRouteAnimationData()">
+    <router-outlet></router-outlet>
+  </div>
+  <button class="uk-margin-small-right" [disabled]="currentAppIndex === showcaseRoutes.length - 1" (click)="goToNextApp()">&gt;</button>
+</div>
+
+<!-- this right here is the layered waves we see in the page -->
+<!-- <div class="spacer image-layer"></div> -->
