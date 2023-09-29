@@ -1,6 +1,9 @@
 <div class="wrapper">
   <h1 class="app-title">Camera</h1>
-  <video #videoEl></video>
+  
+  <!-- image source -->
+  <video #videoEl autoplay muted width="720" height="560"></video>
+
   <div class="button-container">
     <button class="button" (click)="takePhoto()">Take photo</button>
   </div>
