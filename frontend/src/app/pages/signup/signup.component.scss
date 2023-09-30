@@ -1,0 +1,12 @@
+.image-container {
+  width: 420px; /* Set the desired width for the image container */
+  overflow: hidden; /* Hide any overflowing content */
+  img {
+    max-width: 100%; /* Ensure the image scales proportionally within the container */
+    height: auto; /* Allow the image to maintain its aspect ratio */
+  }
+  video {
+    max-width: 100%;
+    height: auto;
+  }
+}
