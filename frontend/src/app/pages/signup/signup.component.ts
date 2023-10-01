@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { Observable, of } from 'rxjs';
 
@@ -21,7 +21,7 @@ function matchValidator(controlName: string, matchingControlName: string): Valid
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.scss']
 })
-export class SignupComponent implements OnInit, AfterViewInit {
+export class SignupComponent implements OnInit {
   public form!: FormGroup;
   // Property to hold the selected image URL
   photoUrl: string | null = null;
@@ -113,16 +113,8 @@ export class SignupComponent implements OnInit, AfterViewInit {
 
   submitForm(): void {
     console.log(this.form.value);
-    if (this.isFormValid()) {
+    if (this.form.valid) {
       console.log('data to send to the API', this.form.value);
     }
-  }
-
-  isFormValid(): boolean {
-    if (this.form.invalid) return false;
-    return true;
-  }
-
-  ngAfterViewInit(): void {
   }
 }
