@@ -1,6 +1,8 @@
 import { NgModule, Optional, SkipSelf } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ApiClientService } from './services/api-client.service';
+import { AuthService } from './services/auth.service';
+import { ErrorHandlerService } from './services/error-handler.service';
 
 
 
@@ -9,7 +11,11 @@ import { ApiClientService } from './services/api-client.service';
   imports: [
     CommonModule
   ],
-  providers: [ ApiClientService ]
+  providers: [
+    ApiClientService,
+    AuthService,
+    ErrorHandlerService
+  ]
 })
 export class CoreModule {
   constructor(@Optional() @SkipSelf() core: CoreModule ){
