@@ -1,17 +1,37 @@
 <div class="uk-container uk-flex uk-flex-center uk-flex-middle uk-height-viewport">
   <div class="uk-card uk-card-default uk-card-body">
     <h3 class="uk-card-title">Login</h3>
-    <form [formGroup]="form" (ngSubmit)="submitForm()">
+    <form [formGroup]="form" (ngSubmit)="login()">
       <div class="uk-margin">
         <div class="uk-inline">
           <span class="uk-form-icon" uk-icon="icon: user"></span>
-          <input formControlName="username" name="username" class="uk-input" type="text" placeholder="Username" required>
+          <input
+            formControlName="username"
+            name="username"
+            class="uk-input"
+            type="text"
+            placeholder="Username"
+            required
+          >
+        </div>
+        <div class="error-message" *ngIf="form.controls['username'].invalid && (form.controls['username'].dirty || form.controls['username'].touched)">
+          Username is required.
         </div>
       </div>
       <div class="uk-margin">
         <div class="uk-inline">
           <span class="uk-form-icon" uk-icon="icon: lock"></span>
-          <input formControlName="password" name="password" class="uk-input" type="password" placeholder="Password" required>
+          <input
+            formControlName="password"
+            name="password"
+            class="uk-input"
+            type="password"
+            placeholder="Password"
+            required
+          >
+        </div>
+        <div class="error-message" *ngIf="form.controls['password'].invalid && (form.controls['password'].dirty || form.controls['password'].touched)">
+          Password is required.
         </div>
       </div>
       <div class="uk-margin">
