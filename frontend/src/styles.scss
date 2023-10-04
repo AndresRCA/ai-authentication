@@ -10,6 +10,10 @@ html, body {
 
 /* Form styles */
 form {
+  .uk-input {
+    transition: none;
+  }
+
   .error-message {
     color: red;
     font-size: 14px;

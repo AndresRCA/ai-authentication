@@ -18,7 +18,7 @@ export class AuthService {
    * @param credentials 
    * @returns 
    */
-  public async signUp(credentials: {username: string, password: string}): Promise<any> {
+  public async signUp(credentials: {username: string, password: string, photo: string}): Promise<any> {
     return this.apiClientService.http.post('/auth/signup', credentials);
   }
 
@@ -74,7 +74,7 @@ export class AuthService {
    * Set user initial data
    * @param userData data for user sent from the backend
    */
-  private initUser(userData: IUser): void {
+  public initUser(userData: IUser): void {
     if (!this.user) this.user = userData;
   }
 }

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AbstractFormBase } from 'src/abstract-classes/form-base.abstract';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { ErrorHandlerService } from 'src/app/core/services/error-handler.service';
 
@@ -9,16 +10,16 @@ import { ErrorHandlerService } from 'src/app/core/services/error-handler.service
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit {
-
-  public form!: FormGroup;
+export class LoginComponent extends AbstractFormBase implements OnInit {
 
   constructor(
     private router: Router,
     private fb: FormBuilder,
     private authService: AuthService,
     private errorHandlerService: ErrorHandlerService
-  ) {}
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
     this.form = this.fb.group(
@@ -47,19 +48,14 @@ export class LoginComponent implements OnInit {
         // after a succesful login, redirect to main page
         this.router.navigateByUrl('/showcase');
       })
-      .catch((error: any) => {
+      .catch((error) => {
         if (error.request.status === 401) {
-          this.displayValidationErrors();
+          // in the case of just an unauthorized request (wrong username or password), check error for details about what field is wrong
+          // ...
         } else {
+          // errors other than "unauthorized" should be unexpected and dealt with using the handleServerErrorResponse method
           this.errorHandlerService.handleServerErrorResponse(error.request.status);
         }
       });
-  }
-
-  /**
-   * When the user tries to submit the form (login), shows the alerts indicating what control is missing requirements all at once
-   */
-  private displayValidationErrors() {
-    // set controls as dirty here so the html can show the validation messages
   }
 }

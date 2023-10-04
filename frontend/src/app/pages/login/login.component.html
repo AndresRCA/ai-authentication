@@ -14,7 +14,7 @@
             required
           >
         </div>
-        <div class="error-message" *ngIf="form.controls['username'].invalid && (form.controls['username'].dirty || form.controls['username'].touched)">
+        <div class="error-message" *ngIf="form.controls['username'].invalid && form.controls['username'].dirty">
           Username is required.
         </div>
       </div>
@@ -30,7 +30,7 @@
             required
           >
         </div>
-        <div class="error-message" *ngIf="form.controls['password'].invalid && (form.controls['password'].dirty || form.controls['password'].touched)">
+        <div class="error-message" *ngIf="form.controls['password'].invalid && form.controls['password'].dirty">
           Password is required.
         </div>
       </div>

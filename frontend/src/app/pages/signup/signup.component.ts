@@ -1,6 +1,11 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, ValidatorFn, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
+import { AbstractFormBase } from 'src/abstract-classes/form-base.abstract';
+import { IUser } from 'src/app/core/interfaces/IUser.interface';
+import { AuthService } from 'src/app/core/services/auth.service';
+import { ErrorHandlerService } from 'src/app/core/services/error-handler.service';
 
 /**
  * Custom validator to match a control value with another control's value. For example a password that needs confirmation
@@ -21,8 +26,7 @@ function matchValidator(controlName: string, matchingControlName: string): Valid
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.scss']
 })
-export class SignupComponent implements OnInit {
-  public form!: FormGroup;
+export class SignupComponent extends AbstractFormBase implements OnInit {
   // Property to hold the selected image URL
   photoUrl: string | null = null;
   // Property to control webcam visibility
@@ -30,7 +34,14 @@ export class SignupComponent implements OnInit {
   // Reference to video element for the webcam feed
   @ViewChild('webcamVideo') webcamVideoEl!: ElementRef<HTMLVideoElement>;
 
-  constructor(private fb: FormBuilder) {}
+  constructor(
+    private fb: FormBuilder,
+    private router: Router,
+    private authService: AuthService,
+    private errorHandlerService: ErrorHandlerService
+  ) {
+    super();
+  }
   
   ngOnInit(): void {
     this.form = this.fb.group(
@@ -111,10 +122,36 @@ export class SignupComponent implements OnInit {
     }
   }
 
-  submitForm(): void {
-    console.log(this.form.value);
-    if (this.form.valid) {
-      console.log('data to send to the API', this.form.value);
+  signUp(): void {
+    if (this.form.invalid) {
+      this.displayValidationErrors();
+      return;
     }
+
+    const { username, password, photo } = this.form.value;
+    const newUser = {
+      username,
+      password,
+      photo
+    };
+
+    this.authService.signUp(newUser)
+      .then((createdUser: IUser) => {
+        // set the newly created user to the service
+        this.authService.initUser(createdUser);
+        
+        // show a notification of success (use a modal instead later)
+        alert('New user was successfully created');
+        this.router.navigateByUrl('/showcase');
+      })
+      .catch((error) => {
+        if (error.request.status === 409) {
+          // in the case of just a "conflict" status, check if username is taken
+          alert('that username is already taken');
+        } else {
+          // errors other than "conflict" should be unexpected and dealt with using the handleServerErrorResponse method
+          this.errorHandlerService.handleServerErrorResponse(error.request.status);
+        }
+      });
   }
 }
