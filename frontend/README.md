@@ -55,7 +55,7 @@ ai-authentication
 
 * `app/pages`: As the name suggests it holds the pages for our `app-routing.module` routes, inside of it we have our `showcase` folder that in itself also has its own routing module.
 * `core`: Folder where singleton services are defined and used across all components.
-* `abstract-classses`: Folder where we store essentially parent classes that contain logic shared on children classes, in angular's case components. Use only for cases where **many** components share the same strict logic, otherwise using abstract classes is not recommended as things can get more complex to read and understand than they need to be.
+* `abstract-classses`: Folder where we store essentially parent classes that contain logic shared on children classes, in angular's case components. Use only for cases where **many** components share the same strict logic, otherwise using abstract classes is not recommended as things can get more complex or tigthly coupled than they need to be (see [composition vs inheritance](https://www.digitalocean.com/community/tutorials/composition-vs-inheritance), where inheritance refers to our abstract class and composition the use of angular services).
 
 ---
 ## Notes

@@ -15,10 +15,10 @@ export class AuthService {
 
   /**
    * Make a POST request to the server to sign up the user
-   * @param credentials 
+   * @param credentials
    * @returns 
    */
-  public async signUp(credentials: {username: string, password: string, photo: string}): Promise<any> {
+  public async signUp(credentials: { username: string, password: string, fileName: string, photoDataUrl: string }): Promise<any> {
     return this.apiClientService.http.post('/auth/signup', credentials);
   }
 

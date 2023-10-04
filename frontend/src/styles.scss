@@ -24,9 +24,4 @@ form {
   input.ng-dirty.ng-invalid {
     border-color: red;
   }
-  
-  /* Add styles to highlight valid controls */
-  input.ng-valid {
-    border-color: green;
-  }
 }

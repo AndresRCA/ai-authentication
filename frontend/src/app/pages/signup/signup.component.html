@@ -7,11 +7,17 @@
           <span class="uk-form-icon" uk-icon="icon: user"></span>
           <input class="uk-input" type="text" placeholder="Username" formControlName="username" name="username" required>
         </div>
+        <div class="error-message" *ngIf="form.controls['username'].invalid && form.controls['username'].dirty">
+          Username is required.
+        </div>
       </div>
       <div class="uk-margin">
         <div class="uk-inline uk-width-1">
           <span class="uk-form-icon" uk-icon="icon: lock"></span>
           <input class="uk-input" type="password" placeholder="Password" formControlName="password" name="password" required>
+        </div>
+        <div class="error-message" *ngIf="form.controls['password'].hasError('required') && form.controls['password'].dirty">
+          Password is required.
         </div>
       </div>
       <div class="uk-margin">
@@ -19,10 +25,19 @@
           <span class="uk-form-icon" uk-icon="icon: lock"></span>
           <input class="uk-input" type="password" placeholder="Confirm Password" formControlName="confirmPassword" name="confirmPassword" required>
         </div>
+        <div class="error-message" *ngIf="form.controls['confirmPassword'].hasError('required') && form.controls['password'].hasError('required') && form.controls['confirmPassword'].dirty">
+          Please enter a passsword.
+        </div>
+        <div class="error-message" *ngIf="(form.controls['confirmPassword'].hasError('match') || form.controls['password'].hasError('match')) && form.controls['confirmPassword'].dirty">
+          Passwords do not match.
+        </div>
       </div>
       <div class="uk-margin">
         <!-- Input for photo upload -->
         <input type="file" class="uk-input" accept="image/*" formControlName="photo" (change)="displaySelectedImage($event)" name="photo">
+        <div class="error-message" *ngIf="form.controls['photo'].invalid && form.controls['photo'].dirty">
+          Please select a photo.
+        </div>
       </div>
 
       <!-- Webcam option -->
@@ -49,11 +64,12 @@
       <div class="uk-margin">
         <!-- Image preview -->
         <div class="image-container">
-          <img [src]="photoUrl" alt="Selected Image" *ngIf="photoUrl">
+          <img [src]="photoDataUrl" alt="Selected Image" *ngIf="photoDataUrl">
         </div>
       </div>
       <div class="uk-margin">
         <button class="uk-button uk-button-primary uk-width-1" type="submit">Sign Up</button>
+        <button (click)="test()">test</button>
       </div>
     </form>
     <p>Already have an account? <a routerLink="/login">Login</a></p>
