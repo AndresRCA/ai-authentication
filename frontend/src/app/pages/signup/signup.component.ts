@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Injector, OnInit, ViewChild, effect, signal } from '@angular/core';
 import { AbstractControl, FormBuilder, ValidatorFn, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AbstractFormBase } from 'src/abstract-classes/form-base.abstract';
@@ -33,24 +33,23 @@ function matchValidator(matchingControlName: string): ValidatorFn {
 export class SignupComponent extends AbstractFormBase implements OnInit {
   // Property to hold the selected image DataUrl
   photoDataUrl: string | null = null;
+
   // Property to control webcam visibility
   showWebcam: boolean = false;
-  // Property to hold the photo taken via webcam
-  // webcamPhoto: string | null = null;
+  // Property to hold the unique name of the image taken by the webcam
+  private webcamPhotoName = signal<string | null>(null);
+
   // Reference to video element for the webcam feed
   @ViewChild('webcamVideo') webcamVideoEl!: ElementRef<HTMLVideoElement>;
 
   constructor(
+    private injector: Injector, // used to declare a function used as an effect for signals
     private fb: FormBuilder,
     private router: Router,
     private authService: AuthService,
     private errorHandlerService: ErrorHandlerService
   ) {
     super();
-  }
-
-  test() {
-    console.log(this.form.get('confirmPassword'))
   }
   
   ngOnInit(): void {
@@ -67,10 +66,29 @@ export class SignupComponent extends AbstractFormBase implements OnInit {
     this.form.controls['password'].valueChanges.subscribe(() => {
       this.form.controls['confirmPassword'].updateValueAndValidity();
     });
+
+    this.webcamPhotoTakenEffect();
   }
 
   /**
-   * Function to handle displaying the selected image
+   * When a photo is taken or deleted, the value of `webcamPhotoName` gets altered, thus triggers an effect that handles
+   * changes done to the form validation options 
+   */
+  private webcamPhotoTakenEffect(): void {
+    effect(() => {
+      if (this.webcamPhotoName()) {
+        // disable required validation for "Choose File" input ("photo" control) when a picture was taken using the webcam
+        this.form.controls['photo'].clearValidators();
+      } else {
+        // if webcam photo was taken and the cleared before the user closed the webcam, make it so it's required again to use the "Choose file" option
+        this.form.controls['photo'].setValidators([Validators.required]);
+      }
+      this.form.controls['photo'].updateValueAndValidity();
+    }, { injector: this.injector });
+  }
+
+  /**
+   * Function to handle displaying and storing the selected image
    * @param event 
    */
   displaySelectedImage(event: any): void {
@@ -86,6 +104,16 @@ export class SignupComponent extends AbstractFormBase implements OnInit {
     } else {
       this.photoDataUrl = null;
     }
+  }
+
+  /**
+   * Set the preview image source to `null` and empties the <input type="file">'s value as well as every other property
+   * used to store the image's properties
+   */
+  clearImage(): void {
+    this.photoDataUrl = null;
+    if (this.webcamPhotoName()) this.webcamPhotoName.set(null);
+    if (this.form.controls['photo'].value) this.form.controls['photo'].setValue('');
   }
 
   /**
@@ -135,11 +163,14 @@ export class SignupComponent extends AbstractFormBase implements OnInit {
 
       // Set the captured photo URL
       this.photoDataUrl = photoDataUrl;
-    }
+      
+      // Generate a unique string for the photo name that will be sent to the server
+      const uniqueFileName = `${uuidv4()}_${new Date().toISOString()}`;
+      this.webcamPhotoName.set(uniqueFileName);
 
-    // Generate a unique string for the 'photo' control
-    // const uniqueFileName = `${uuidv4()}_${new Date().toISOString()}`;
-    // this.webcamPhoto = uniqueFileName;
+      // if there already was photo uploaded using the "Choose a file" control, clear the previous value
+      if (this.form.controls['photo'].value) this.form.controls['photo'].setValue('');
+    }
   }
 
   signUp(): void {
@@ -149,7 +180,20 @@ export class SignupComponent extends AbstractFormBase implements OnInit {
     }
 
     const { username, password, photo } = this.form.value;
-    const fileName = this.extractFileName(photo);
+    let fileName: string;
+    if (photo) {
+      // if photo was taken from the "Choose file" form control
+      fileName = this.extractFileName(photo);
+    } else if (this.webcamPhotoName()) {
+      // if photo was taken from the "Use Webcam" feature
+      fileName = this.webcamPhotoName() as string;
+    } else {
+      // this should never occur if validation is working properly
+      console.error('Unexpected error has ocurred.')
+      return;
+    }
+    
+    // const fileName = this.extractFileName(photo);
     const photoDataUrl = this.photoDataUrl!
     const newUser = {
       username,
@@ -157,6 +201,7 @@ export class SignupComponent extends AbstractFormBase implements OnInit {
       fileName,
       photoDataUrl
     };
+    console.log('new user credentials', newUser)
 
     this.authService.signUp(newUser)
       .then((createdUser: IUser) => {
@@ -179,17 +224,25 @@ export class SignupComponent extends AbstractFormBase implements OnInit {
   }
 
   /**
-   * Given a generic path, return the last element of it including the extension
+   * Given a generic path, returns the file name belonging in that path
    * @param filePath 
-   * @returns file name with extension
+   * @returns file name without extension
    */
   private extractFileName(filePath: string): string {
-    // Split the file path by the backslash (\) or forward slash (/) to get an array of path components.
     const pathComponents = filePath.split(/[\\\/]/);
-    
+
     // Get the last component from the array, which is the file name.
-    const fileName = pathComponents[pathComponents.length - 1];
-    
+    const file = pathComponents[pathComponents.length - 1];
+
+    // Split the filename by dots to handle filenames with multiple dots.
+    const fileNameComponents = file.split('.');
+
+    // Remove the last component which is the file extension.
+    fileNameComponents.pop();
+
+    // Join the remaining components to get the file name without extension.
+    const fileName = fileNameComponents.join('.');
+
     return fileName;
   }
 }

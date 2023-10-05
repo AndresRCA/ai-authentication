@@ -32,9 +32,9 @@
           Passwords do not match.
         </div>
       </div>
-      <div class="uk-margin">
+      <div class="uk-margin" [hidden]="showWebcam">
         <!-- Input for photo upload -->
-        <input type="file" class="uk-input" accept="image/*" formControlName="photo" (change)="displaySelectedImage($event)" name="photo">
+        <input type="file" class="uk-input" accept="image/jpeg,image/png,image/webp" formControlName="photo" (change)="displaySelectedImage($event)" name="photo">
         <div class="error-message" *ngIf="form.controls['photo'].invalid && form.controls['photo'].dirty">
           Please select a photo.
         </div>
@@ -52,24 +52,28 @@
         <div class="uk-margin">
           <!-- Video element for webcam feed -->
           <div class="image-container">
-            <video #webcamVideo autoplay muted></video>
+            <video [class.photo-invalid]="form.controls['photo'].invalid && form.controls['photo'].dirty" #webcamVideo autoplay muted></video>
           </div>
         </div>
         <div class="uk-margin">
           <!-- Button to capture photo from webcam -->
-          <button class="uk-button uk-button-primary" (click)="captureWebcamPhoto()">Take a Picture</button>
+          <button type="button" class="uk-button uk-button-primary" (click)="captureWebcamPhoto()">Take a Picture</button>
         </div>
       </div>
 
       <div class="uk-margin">
         <!-- Image preview -->
-        <div class="image-container">
-          <img [src]="photoDataUrl" alt="Selected Image" *ngIf="photoDataUrl">
+        <div class="image-preview">
+          <div class="image-container">
+            <img [src]="photoDataUrl" alt="Selected Image" *ngIf="photoDataUrl">
+          </div>
+          <button title="clear image" class="uk-button uk-border-circle uk-box-shadow-small image-clear-button" type="button" (click)="clearImage()" *ngIf="photoDataUrl">
+            <span uk-icon="icon: close"></span>
+          </button>
         </div>
       </div>
       <div class="uk-margin">
         <button class="uk-button uk-button-primary uk-width-1" type="submit">Sign Up</button>
-        <button (click)="test()">test</button>
       </div>
     </form>
     <p>Already have an account? <a routerLink="/login">Login</a></p>

@@ -8,5 +8,18 @@
   video {
     max-width: 100%;
     height: auto;
+    &.photo-invalid {
+      border: 1px solid red;
+    }
   }
+}
+
+.image-clear-button {
+  background-color: #d8d8d88f;
+  width: 45px;
+  line-height: 46px;
+  padding: 0;
+  position: relative;
+  left: 400px;
+  bottom: 15px;
 }
