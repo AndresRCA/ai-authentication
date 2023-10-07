@@ -5,6 +5,7 @@ import { AbstractFormBase } from 'src/abstract-classes/form-base.abstract';
 import { IUser } from 'src/app/core/interfaces/IUser.interface';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { ErrorHandlerService } from 'src/app/core/services/error-handler.service';
+import { WebcamService } from 'src/app/core/services/webcam.service';
 import { v4 as uuidv4 } from 'uuid';
 
 /**
@@ -47,6 +48,7 @@ export class SignupComponent extends AbstractFormBase implements OnInit {
     private fb: FormBuilder,
     private router: Router,
     private authService: AuthService,
+    private webcamService: WebcamService,
     private errorHandlerService: ErrorHandlerService
   ) {
     super();
@@ -107,6 +109,46 @@ export class SignupComponent extends AbstractFormBase implements OnInit {
   }
 
   /**
+   * Function to toggle webcam visibility
+   */
+  async toggleWebcam(): Promise<void> {
+    this.showWebcam = !this.showWebcam;
+
+    if (this.showWebcam) {
+      // If showing webcam, start capturing the video stream
+      try {
+        const stream = await this.webcamService.startWebcam();
+        this.webcamVideoEl.nativeElement.srcObject = stream;
+      } catch (error) {
+        console.error('Error starting webcam.', error);
+      }
+    } else {
+      // If hiding webcam, stop the video stream
+      this.webcamService.stopWebcam();
+    }
+  }
+
+  /**
+   * Function to capture a photo from the webcam
+   */
+  async captureWebcamPhoto() {
+    try {
+      const photoDataUrl = await this.webcamService.captureWebcamPhoto(this.webcamVideoEl.nativeElement);
+      // Set the captured photo URL
+      this.photoDataUrl = photoDataUrl;
+    
+      // Generate a unique string for the photo name that will be sent to the server
+      const uniqueFileName = `${uuidv4()}_${new Date().toISOString()}`;
+      this.webcamPhotoName.set(uniqueFileName);
+
+      // if there already was photo uploaded using the "Choose a file" control, clear the previous value
+      if (this.form.controls['photo'].value) this.form.controls['photo'].setValue('');
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  /**
    * Set the preview image source to `null` and empties the <input type="file">'s value as well as every other property
    * used to store the image's properties
    */
@@ -114,63 +156,6 @@ export class SignupComponent extends AbstractFormBase implements OnInit {
     this.photoDataUrl = null;
     if (this.webcamPhotoName()) this.webcamPhotoName.set(null);
     if (this.form.controls['photo'].value) this.form.controls['photo'].setValue('');
-  }
-
-  /**
-   * Function to toggle webcam visibility
-   */
-  toggleWebcam(): void {
-    this.showWebcam = !this.showWebcam;
-
-    // If showing webcam, start capturing the video stream
-    if (this.showWebcam) {
-      navigator.mediaDevices
-        .getUserMedia({ video: true })
-          .then((stream) => {
-            if (this.webcamVideoEl.nativeElement) {
-              this.webcamVideoEl.nativeElement.srcObject = stream;
-            }
-          })
-          .catch((error) => {
-            console.error('Error accessing webcam:', error);
-          });
-    } else {
-      // If hiding webcam, stop the video stream
-      const stream = this.webcamVideoEl.nativeElement.srcObject;
-      if (stream instanceof MediaStream) {
-        const tracks = stream.getTracks();
-        tracks.forEach((track) => track.stop());
-      }
-    }
-  }
-
-  /**
-   * Function to capture a photo from the webcam
-   */
-  captureWebcamPhoto(): void {
-    const videoElement = this.webcamVideoEl.nativeElement;
-
-    // Create a canvas to capture the video frame
-    const canvas = document.createElement('canvas');
-    canvas.width = videoElement.videoWidth;
-    canvas.height = videoElement.videoHeight;
-    const context = canvas.getContext('2d');
-
-    // Draw the video frame onto the canvas
-    if (context) {
-      context.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
-      const photoDataUrl = canvas.toDataURL('image/jpeg'); // Convert to base64 data URL
-
-      // Set the captured photo URL
-      this.photoDataUrl = photoDataUrl;
-      
-      // Generate a unique string for the photo name that will be sent to the server
-      const uniqueFileName = `${uuidv4()}_${new Date().toISOString()}`;
-      this.webcamPhotoName.set(uniqueFileName);
-
-      // if there already was photo uploaded using the "Choose a file" control, clear the previous value
-      if (this.form.controls['photo'].value) this.form.controls['photo'].setValue('');
-    }
   }
 
   signUp(): void {

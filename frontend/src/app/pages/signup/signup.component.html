@@ -52,7 +52,7 @@
         <div class="uk-margin">
           <!-- Video element for webcam feed -->
           <div class="image-container">
-            <video [class.photo-invalid]="form.controls['photo'].invalid && form.controls['photo'].dirty" #webcamVideo autoplay muted></video>
+            <video #webcamVideo [class.photo-invalid]="form.controls['photo'].invalid && form.controls['photo'].dirty" autoplay muted></video>
           </div>
         </div>
         <div class="uk-margin">

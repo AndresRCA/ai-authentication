@@ -3,8 +3,11 @@ import { CommonModule } from '@angular/common';
 import { ApiClientService } from './services/api-client.service';
 import { AuthService } from './services/auth.service';
 import { ErrorHandlerService } from './services/error-handler.service';
+import { WebcamService } from './services/webcam.service';
 
-
+const webcamServiceFactory = () => {
+  return new WebcamService();
+}
 
 @NgModule({
   declarations: [],
@@ -14,6 +17,10 @@ import { ErrorHandlerService } from './services/error-handler.service';
   providers: [
     ApiClientService,
     AuthService,
+    {
+      provide: WebcamService,
+      useFactory: webcamServiceFactory
+    },
     ErrorHandlerService
   ]
 })
