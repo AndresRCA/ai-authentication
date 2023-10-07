@@ -117,7 +117,7 @@ export class SignupComponent extends AbstractFormBase implements OnInit {
     if (this.showWebcam) {
       // If showing webcam, start capturing the video stream
       try {
-        const stream = await this.webcamService.startWebcam();
+        const stream = await this.webcamService.getMediaStream();
         this.webcamVideoEl.nativeElement.srcObject = stream;
       } catch (error) {
         console.error('Error starting webcam.', error);

@@ -6,6 +6,9 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class WebcamService {
 
+  /**
+   * Source of the video
+   */
   private mediaStream: MediaStream | null = null;
 
   constructor() { }
@@ -14,7 +17,7 @@ export class WebcamService {
    * Starts webcam and returns the media stream
    * @returns media stream to insert into the video html element
    */
-  async startWebcam(): Promise<MediaStream> {
+  async getMediaStream(): Promise<MediaStream> {
     this.mediaStream = await navigator.mediaDevices.getUserMedia({ video: true });
     return this.mediaStream;
   }
