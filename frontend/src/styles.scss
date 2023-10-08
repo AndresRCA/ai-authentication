@@ -7,3 +7,21 @@ html, body {
 
 // global styles for ShowcaseComponent and any component used under the route /showcase
 @import './assets/scss/showcase.scss';
+
+/* Form styles */
+form {
+  .uk-input {
+    transition: none;
+  }
+
+  .error-message {
+    color: red;
+    font-size: 14px;
+    margin-top: 5px;
+  }
+  
+  /* Add styles to highlight invalid controls */
+  input.ng-dirty.ng-invalid {
+    border-color: red;
+  }
+}

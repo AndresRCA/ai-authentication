@@ -1,5 +1,6 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, ViewChild } from '@angular/core';
 import * as faceapi from 'face-api.js';
+import { WebcamService } from 'src/app/core/services/webcam.service';
 
 @Component({
   selector: 'app-image',
@@ -7,18 +8,17 @@ import * as faceapi from 'face-api.js';
   styleUrls: ['./image.component.scss']
 })
 export class ImageComponent implements AfterViewInit, OnDestroy {
-  @ViewChild('videoEl') videoEl!: ElementRef<HTMLVideoElement>;
-  /**
-   * source of the video
-   */
-  private mediaStream!: MediaStream;
 
-  constructor () {}
+  @ViewChild('videoEl') videoEl!: ElementRef<HTMLVideoElement>;
+
+  constructor (private webcamService: WebcamService) {}
 
   async ngAfterViewInit() {
     try {
       // video setup
-      await this.startWebcam();
+      const stream = await this.webcamService.getMediaStream();
+      this.videoEl.nativeElement.srcObject = stream;
+
       // a timeout is needed to wait for the media to load...
       setTimeout(() => {
         // face recognition setup
@@ -33,14 +33,7 @@ export class ImageComponent implements AfterViewInit, OnDestroy {
    * stop the webcam stream
    */
   ngOnDestroy(): void {
-    this.mediaStream.getVideoTracks()[0].stop();
-  }
-
-  private async startWebcam() {
-    let mediaStream = await navigator.mediaDevices.getUserMedia({ video: true });
-    this.mediaStream = mediaStream;
-    this.videoEl.nativeElement.srcObject = mediaStream;
-    this.videoEl.nativeElement.play(); // start webcam video
+    this.webcamService.stopWebcam();
   }
 
   /**
@@ -68,26 +61,23 @@ export class ImageComponent implements AfterViewInit, OnDestroy {
     });
   }
 
-  takePhoto() {
-    // build an image using the webcam <video>
-    const canvas = document.createElement("canvas");
-    canvas.width = this.videoEl.nativeElement.videoWidth;
-    canvas.height = this.videoEl.nativeElement.videoHeight;
-  
-    canvas.getContext("2d")!.drawImage(this.videoEl.nativeElement, 0, 0);
-  
-    const data = canvas.toDataURL("image/png");
-    
-    // add this link to download the image
-    const a = document.createElement('a');
-    a.href = data;
-    a.download = 'photo.png';
-    document.body.appendChild(a);
+  async takePhoto() {
+    try {
+      const dataUrl = await this.webcamService.captureWebcamPhoto(this.videoEl.nativeElement);
 
-    // click the empty link to initiate a download
-    a.click();
+      // add this link to download the image
+      const a = document.createElement('a');
+      a.href = dataUrl;
+      a.download = 'photo.png';
+      document.body.appendChild(a);
 
-    // clean DOM
-    document.body.removeChild(a);
+      // click the empty link to initiate a download
+      a.click();
+
+      // clean DOM
+      document.body.removeChild(a);
+    } catch (error) {
+      console.error(error)
+    }
   }
 }
