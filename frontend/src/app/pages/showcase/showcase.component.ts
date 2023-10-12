@@ -23,7 +23,6 @@ export class ShowcaseComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    console.log(this.contexts.getContext('primary')?.route?.snapshot?.data?.['animation'])
     // set showcaseRoutes to define the right order when navigating while using the site
     showcaseRoutes.sort((a, b) => a.data!['animation'] - b.data!['animation']); // make sure the order is right
     this.showcaseRoutes = showcaseRoutes.map((route) => route.path as string);

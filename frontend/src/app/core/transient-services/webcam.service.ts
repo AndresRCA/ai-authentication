@@ -1,10 +1,10 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 
 /**
  * Transient (non-singleton) service for webcam usage inside a component
  */
 @Injectable()
-export class WebcamService {
+export class WebcamService implements OnDestroy {
 
   /**
    * Source of the video
@@ -12,6 +12,10 @@ export class WebcamService {
   private mediaStream: MediaStream | null = null;
 
   constructor() { }
+  
+  ngOnDestroy(): void {
+    this.stopWebcam();
+  }
 
   /**
    * Starts webcam and returns the media stream
