@@ -5,7 +5,7 @@ import { AbstractFormBase } from 'src/abstract-classes/form-base.abstract';
 import { IUser } from 'src/app/core/interfaces/IUser.interface';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { ErrorHandlerService } from 'src/app/core/services/error-handler.service';
-import { WebcamService } from 'src/app/core/services/webcam.service';
+import { WebcamService } from 'src/app/core/transient-services/webcam.service';
 import { v4 as uuidv4 } from 'uuid';
 
 /**
@@ -29,7 +29,8 @@ function matchValidator(matchingControlName: string): ValidatorFn {
 @Component({
   selector: 'app-signup',
   templateUrl: './signup.component.html',
-  styleUrls: ['./signup.component.scss']
+  styleUrls: ['./signup.component.scss'],
+  providers: [WebcamService]
 })
 export class SignupComponent extends AbstractFormBase implements OnInit {
   // Property to hold the selected image DataUrl

@@ -45,6 +45,7 @@ ai-authentication
 └── src
     ├── app
     │   ├── core
+    │   │   ├── transient-services
     │   │   └── services
     │   └── pages
     │       ├── showcase
@@ -54,7 +55,17 @@ ai-authentication
 ```
 
 * `app/pages`: As the name suggests it holds the pages for our `app-routing.module` routes, inside of it we have our `showcase` folder that in itself also has its own routing module.
-* `core`: Folder where singleton services are defined and used across all components.
+* `core`: Folder where both singleton and transient services are defined and used across all components. One thing to note is that transient services are not inlcuded in the core module, but provided in individual components.
+> transient services refers to services that are instantiated once by every component that uses them, like so with the providers option:
+```typescript
+@Component({
+    selector: 'app-image',
+    templateUrl: './image.component.html',
+    styleUrls: ['./image.component.scss'],
+    providers: [WebcamService, FaceRecognitionService]
+})
+export class ImageComponent implements AfterViewInit { ... }
+```
 * `abstract-classses`: Folder where we store essentially parent classes that contain logic shared on children classes, in angular's case components. Use only for cases where **many** components share the same strict logic, otherwise using abstract classes is not recommended as things can get more complex or tigthly coupled than they need to be (see [composition vs inheritance](https://www.digitalocean.com/community/tutorials/composition-vs-inheritance), where inheritance refers to our abstract class and composition the use of angular services).
 
 ---
