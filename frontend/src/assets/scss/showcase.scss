@@ -1,5 +1,5 @@
 .spacer {
-  aspect-ratio: 960/300;
+  aspect-ratio: 960/200;
   width: 100%;
   background-repeat: no-repeat;
   background-position: center;
@@ -7,7 +7,19 @@
 }
 
 .image-layer {
-  background-image: url('../svgs/image-layer-900x300.svg');
+  z-index: auto;
+  background-image: url('../svgs/image-layer-900x200.svg');
+}
+
+.top-strip {
+  transform: scaleY(-1);
+  position: fixed;
+  top: 0px;
+}
+
+.bottom-strip {
+  position: fixed;
+  bottom: 0px;
 }
 
 .wrapper {
@@ -21,9 +33,10 @@
   h1.app-title {
     margin-top: 0;
     margin-bottom: 16px;
-    color: #333333;
+    color: #fff;
     font-size: 24px;
     font-weight: normal;
+    z-index: 999;
   }
   
   .button-container {

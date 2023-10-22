@@ -1,14 +1,17 @@
-/* You can add global styles to this file, and also import other style files */
+/* variables */
+// theme
+$main-theme-color: #302936;
+$main-theme-color-gradient: linear-gradient(135deg, #302936, #332940);
+
+/* global styles */
 html, body {
-  background-color: #f2f2f2;
+  color: #fff;
+  background: $main-theme-color-gradient; // background-color: #f2f2f2;
   margin: 0;
   height: 100%;
 }
 
-// global styles for ShowcaseComponent and any component used under the route /showcase
-@import './assets/scss/showcase.scss';
-
-/* Form styles */
+/* form styles */
 form {
   .uk-input {
     transition: none;
@@ -25,3 +28,6 @@ form {
     border-color: red;
   }
 }
+
+// global styles for ShowcaseComponent and any component used under the route /showcase
+@import './assets/scss/showcase.scss';
