@@ -1,40 +1,40 @@
-from ML_Resources import *
+from .ML_Resources import *
 
 # Load the training dataset
 folder_dataset = datasets.ImageFolder(root="./data/faces/training/")
 
 # Resize the images and transform to tensors
-transformation = transforms.Compose([
-                        transforms.Grayscale(num_output_channels=1),
-                        transforms.Resize((100,100)),
-                                    transforms.RandomHorizontalFlip() ,
-                                     transforms.RandomVerticalFlip() ,
-                                     transforms.ToTensor()
-                                    ])
+transformation = transforms.Compose(
+    [
+        transforms.Grayscale(num_output_channels=1),
+        transforms.Resize((100, 100)),
+        transforms.RandomHorizontalFlip(),
+        transforms.RandomVerticalFlip(),
+        transforms.ToTensor(),
+    ]
+)
 
 # Initialize the network
-siamese_dataset = SiameseNetworkDataset(imageFolderDataset=folder_dataset,
-                                        transform=transformation)
+siamese_dataset = SiameseNetworkDataset(
+    imageFolderDataset=folder_dataset, transform=transformation
+)
 # Load the training dataset
-train_dataloader = DataLoader(siamese_dataset,
-                        shuffle=True,
-                        num_workers=8,
-                        batch_size=64)
+train_dataloader = DataLoader(
+    siamese_dataset, shuffle=True, num_workers=8, batch_size=64
+)
 
 net = SiameseNetwork().cuda()
 criterion = Crossentropy()
-optimizer = optim.Adam(net.parameters(), lr = 0.0005 )
+optimizer = optim.Adam(net.parameters(), lr=0.0005)
 
 counter = []
-loss_history = [] 
-iteration_number= 0
+loss_history = []
+iteration_number = 0
 
 # Iterate throught the epochs
 for epoch in range(100):
-
     # Iterate over batches
     for i, (img0, img1, label) in enumerate(train_dataloader, 0):
-
         # Send the images and labels to CUDA
         img0, img1, label = img0.cuda(), img1.cuda(), label.cuda()
 
@@ -54,13 +54,13 @@ for epoch in range(100):
         optimizer.step()
 
         # Every 10 batches print out the loss
-        if i % 10 == 0 :
+        if i % 10 == 0:
             print(f"Epoch number {epoch}\n Current loss {loss_contrastive.item()}\n")
             iteration_number += 10
 
             counter.append(iteration_number)
             loss_history.append(loss_contrastive.item())
 
-PATH="siameses_model_formal.pt"
+PATH = "siameses_model_formal.pt"
 
 torch.save(net, PATH)

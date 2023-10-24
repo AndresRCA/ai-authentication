@@ -1,0 +1,8 @@
+DEV_MODE = True
+
+# database
+SQLALCHEMY_DATABASE_URI = 'postgresql://username:password@localhost/database_name'
+SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+# other
+COOKIE_SECRET_KEY = 'secret-key'

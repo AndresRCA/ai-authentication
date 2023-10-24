@@ -1,5 +1,6 @@
 main.cpython-38.pyc
 __pycache__
+config.py
 
 # build from frontend
 dist/
