@@ -17,6 +17,10 @@ export class VoiceComponent {
     // audio setup
     let audioChunks: Blob[] = [];
 
+    /**
+     * IMPORTANT: ASK FOR THIS WHEN PRESSING THE RECORD BUTTON FOR THE FIRST TIME, NOT WHEN THE COMPONENT IS CREATED LIKE HERE
+     * AlSO CREATE A SERVICE FOR MIC RELATED STUFF
+     */
     navigator.mediaDevices.getUserMedia({ audio: true }).then((audioStream) => {
       this.mediaRecorder = new MediaRecorder(audioStream);
 
