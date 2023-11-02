@@ -1,5 +1,8 @@
 main.cpython-38.pyc
 __pycache__
+
+# config files
+.env
 config.py
 
 # build from frontend
