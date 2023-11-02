@@ -1,34 +1,37 @@
 blinker==1.6.3
 brotlipy==0.7.0
-certifi @ file:///croot/certifi_1690232220950/work/certifi
-cffi @ file:///croot/cffi_1670423208954/work
-charset-normalizer @ file:///tmp/build/80754af9/charset-normalizer_1630003229654/work
+certifi==2023.7.22
+cffi==1.15.1
+charset-normalizer==2.0.4
 click==8.1.7
-cryptography @ file:///croot/cryptography_1694444244250/work
+cryptography==41.0.3
 Flask==3.0.0
 Flask-SQLAlchemy==3.1.1
 greenlet==3.0.0
-idna @ file:///croot/idna_1666125576474/work
+idna==3.4
 importlib-metadata==6.8.0
 itsdangerous==2.1.2
 Jinja2==3.1.2
 MarkupSafe==2.1.3
-mkl-fft @ file:///croot/mkl_fft_1695058164594/work
-mkl-random @ file:///croot/mkl_random_1695059800811/work
+mkl-fft==1.3.8
+mkl-random==1.2.4
 mkl-service==2.4.0
-numpy @ file:///work/mkl/numpy_and_numpy_base_1682953417311/work
-Pillow @ file:///croot/pillow_1696580024257/work
+numpy==1.24.3
+Pillow==10.0.1
+pip==23.3
 psycopg2-binary==2.9.9
-pycparser @ file:///tmp/build/80754af9/pycparser_1636541352034/work
-pyOpenSSL @ file:///croot/pyopenssl_1690223430423/work
-PySocks @ file:///tmp/build/80754af9/pysocks_1605305779399/work
+pycparser==2.21
+pyOpenSSL==23.2.0
+PySocks==1.7.1
 python-dotenv==1.0.0
-requests @ file:///croot/requests_1690400202158/work
+requests==2.31.0
+setuptools==68.0.0
 SQLAlchemy==2.0.22
 torch==1.13.0
 torchaudio==0.13.0
 torchvision==0.14.0
-typing_extensions @ file:///croot/typing_extensions_1690297465030/work
-urllib3 @ file:///croot/urllib3_1686163155763/work
+typing_extensions==4.7.1
+urllib3==1.26.16
 Werkzeug==3.0.0
+wheel==0.41.2
 zipp==3.17.0

@@ -3,7 +3,7 @@ class Config:
     Class used for configurating the flask app object. Each property represents a key used in the configuration 
     object used in flask.
     """
-    DEBUG = True
+    DEBUG = False # fixed value
     # database
     SQLALCHEMY_DATABASE_URI = (
         "postgresql://username:password@localhost/database_name"
