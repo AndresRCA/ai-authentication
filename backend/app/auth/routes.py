@@ -15,8 +15,9 @@ def login():
     password = data["password"]
 
     # Check if the user exists in the database
-    user = User.query.filter_by(username=username, password=password).first()
+    user = User.query.filter_by(username=username, password=password).add_column(User.username).first()
     if user:
+        # return only the username
         return jsonify(user)
     else:
         return jsonify({"error": "Invalid username or password"}), 401
@@ -37,10 +38,12 @@ def signup():
 
     username = data["username"]
     password = data["password"]
+    file_name = data["fileName"]
+    data_url = data["photoDataUrl"]
 
     existing_user = User.query.filter_by(username=username).first()
     if existing_user:
-        return jsonify({"error": "Username already exists"}), 400
+        return jsonify({"error": "Username already exists"}), 409 # send "conflict" status code
 
     new_user = User(username=username, password=password)
     db.session.add(new_user)

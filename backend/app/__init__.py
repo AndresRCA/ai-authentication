@@ -1,5 +1,7 @@
+import os
+
 from flask import Flask
-from config import Config
+from flask_cors import CORS
 
 # blueprints
 from .routes import app_bp
@@ -13,11 +15,32 @@ from .auth.models.user import User
 from .auth.models.user_photo import UserPhoto
 
 
-def create_app(config_class=Config):
+def load_dev_config(app: Flask):
+    # set dev config
+    app.config.from_object("config_dev.Config")
+    # allow all origins during development
+    CORS(app)
+    return app
+
+
+def load_prod_config(app: Flask):
+    # set production config
+    app.config.from_object("config_prod.Config")
+    # allow only
+    CORS(app, resources={r"*": {"origins": os.getenv("APP_DOMAIN")}})
+    return app
+
+
+def create_app():
     app = Flask(__name__)
 
-    # set config
-    app.config.from_object(config_class)
+    # general config
+    FLASK_ENV = os.getenv("FLASK_ENV")
+
+    if FLASK_ENV == "development":
+        app = load_dev_config(app)
+    else:
+        app = load_prod_config(app)
 
     # start database
     db.init_app(app)

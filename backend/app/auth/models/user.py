@@ -17,7 +17,7 @@ class User(db.Model):
     password = db.Column(String(80), nullable=False)
 
     # Define one-to-one relationship with UserImages
-    user_photo = db.relationship(
+    photo = db.relationship(
         "UserPhoto",
         uselist=False, # uselist=False => one-to-one relationship
         back_populates="user", # back_populates => establish 
