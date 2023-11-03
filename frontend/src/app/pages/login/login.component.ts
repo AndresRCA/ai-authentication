@@ -31,17 +31,12 @@ export class LoginComponent extends AbstractFormBase implements OnInit {
   }
 
   login(): void {
-    console.log(this.form.value);
     if (this.form.invalid) {
       this.displayValidationErrors();
       return;
     }
 
-    const { username, password } = this.form.value;
-    const userCredentials = {
-      username,
-      password
-    };
+    const userCredentials = this.form.value;
 
     this.authService.login(userCredentials)
       .then(() => {
@@ -50,6 +45,7 @@ export class LoginComponent extends AbstractFormBase implements OnInit {
       })
       .catch((error) => {
         if (error.request.status === 401) {
+          console.log(error)
           // in the case of just an unauthorized request (wrong username or password), check error for details about what field is wrong
           // ...
         } else {

@@ -15,10 +15,11 @@ def login():
     password = data["password"]
 
     # Check if the user exists in the database
-    user = User.query.filter_by(username=username, password=password).add_column(User.username).first()
+    user = User.query.filter_by(username=username, password=password).first()
     if user:
         # return only the username
-        return jsonify(user)
+        print(user)
+        return user
     else:
         return jsonify({"error": "Invalid username or password"}), 401
 
