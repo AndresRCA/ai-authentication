@@ -9,3 +9,6 @@ config_prod.py
 
 # build from frontend
 dist/
+
+# other
+rest.http

@@ -26,7 +26,7 @@ def load_dev_config(app: Flask):
 def load_prod_config(app: Flask):
     # set production config
     app.config.from_object("config_prod.Config")
-    # allow only
+    # allow requests only from the specified domain
     CORS(app, resources={r"*": {"origins": os.getenv("APP_DOMAIN")}})
     return app
 
@@ -36,7 +36,6 @@ def create_app():
 
     # general config
     FLASK_ENV = os.getenv("FLASK_ENV")
-
     if FLASK_ENV == "development":
         app = load_dev_config(app)
     else:
