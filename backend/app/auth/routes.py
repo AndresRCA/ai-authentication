@@ -63,9 +63,22 @@ def signup():
     return new_user
 
 
-@auth_bp.route("/users/session", methods=["GET"])
+@auth_bp.route("/users/verify-session", methods=["GET"])
 def user_session():
     # Here, you might retrieve user details from the database using the current session/token
     # This logic will depend on how the session/token is managed and associated with users
     # Return user details as needed
     return {"username": "asd"}
+
+
+@auth_bp.route("/users/photos/verify/<photo_data_url>", methods=["GET"])
+def verify_user_photo(photo_data_url):
+    # retrieve user from JWT value in cookies
+    # user = ...
+    # user_photo = user.photo.data_url
+
+    # build an image from photo_data_url or use the raw data to feed it into the ML model
+    # feed user_photo and photo_data_url into the ML model to start the comparison
+    # ...
+    
+    return {"message": "user is the same person"}
