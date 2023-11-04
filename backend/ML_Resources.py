@@ -6,11 +6,9 @@ from torch.autograd import Variable
 import torch.nn as nn
 from torch import optim
 import torch.nn.functional as F
-
 import random
 import numpy as np
 from PIL import Image
-
 
 class SiameseNetworkDataset(Dataset):
     def __init__(self, imageFolderDataset, transform=None):
@@ -51,7 +49,6 @@ class SiameseNetworkDataset(Dataset):
 
     def __len__(self):
         return len(self.imageFolderDataset.imgs)
-
 
 class SiameseNetwork(nn.Module):
     def __init__(self):
@@ -101,7 +98,6 @@ class SiameseNetwork(nn.Module):
 
         return output1, output2
 
-
 class ContrastiveLoss(torch.nn.Module):
     def __init__(self, margin=1):
         super(ContrastiveLoss, self).__init__()
@@ -118,7 +114,6 @@ class ContrastiveLoss(torch.nn.Module):
         )
 
         return loss_contrastive
-
 
 class Crossentropy(torch.nn.Module):
     def __init__(self):

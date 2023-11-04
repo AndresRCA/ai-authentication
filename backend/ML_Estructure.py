@@ -1,7 +1,7 @@
 from ML_Resources import *
 
 # Load the training dataset
-folder_dataset = datasets.ImageFolder(root="./data/faces/training/")
+folder_dataset = datasets.ImageFolder(root="*")
 
 # Resize the images and transform to tensors
 transformation = transforms.Compose(
@@ -36,7 +36,7 @@ def ML_TRAINING(PATH,MODE,iterate,finetunning,SAVE=None):
     iteration_number = 0
 
     # Iterate throught the epochs
-    for epoch in range(iterative):
+    for epoch in range(iterate):
         # Iterate over batches
         for i, (img0, img1, label) in enumerate(train_dataloader, 0):
             # Send the images and labels to CUDA

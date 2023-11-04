@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 from matplotlib.table import Table
 
 # Load the training dataset
-folder_dataset = datasets.ImageFolder(root="./data/faces/testing_2/Celebrity Faces Dataset")
+folder_dataset = datasets.ImageFolder(root="*")
 
 # Resize the images and transform to tensors
 transformation = transforms.Compose(
@@ -125,13 +125,11 @@ def ML_SCORING(y, X):
 
 def ML_IMAGES(PATH,iterate,Finetunning,SAVE=None):
     model=torch.load(PATH)
-
-    image1_path = 'prueba_4.jpg'
-    image2_path = 'Perfil.jpg'
-
+    model.eval()
+    image1_path = '*.jpg'
+    image2_path = '*.PNG'
     image1_RGB = Image.open(image1_path).convert('RGB')
     image2_RGB = Image.open(image2_path).convert('RGB')
-
 
     trans = transforms.Compose([transforms.Resize((224, 224)),transforms.ToTensor()])
     image1_L=trans(image1_RGB).unsqueeze(0)
@@ -146,4 +144,13 @@ def ML_IMAGES(PATH,iterate,Finetunning,SAVE=None):
 
     concatenated = torch.cat((image1_L, image2_L), 0)
     imshow(torchvision.utils.make_grid(concatenated), f'Dissimilarity: {euclidean_distance.item():.2f}')
+
+def ML_WEB_IMAGES(PATH,test_image_web,test_image):
+    model=torch.load(PATH).eval()
+    model.eval()
+    image1 = transformation_test(test_image_web).unsqueeze(0)  # Agregar una dimensión de lote (batch)
+    image2 = transformation_test(test_image).unsqueeze(0)
+    euclidean_distance = F.pairwise_distance(image1, image2)
+    return euclidean_distance
+
 
