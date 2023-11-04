@@ -1,4 +1,5 @@
 import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
+import { ApiClientService } from 'src/app/core/services/api-client.service';
 import { FaceRecognitionService } from 'src/app/core/transient-services/face-recognition.service';
 import { WebcamService } from 'src/app/core/transient-services/webcam.service';
 
@@ -13,6 +14,7 @@ export class ImageComponent implements AfterViewInit {
   @ViewChild('videoEl') videoEl!: ElementRef<HTMLVideoElement>;
 
   constructor (
+    private apiClientService: ApiClientService,
     private webcamService: WebcamService,
     private faceRecognitionService: FaceRecognitionService
   ) {}
@@ -58,6 +60,9 @@ export class ImageComponent implements AfterViewInit {
 
       // clean DOM
       document.body.removeChild(a);
+      
+      let res = await this.apiClientService.http.get('/users/photos/verify/' + dataUrl);
+      console.log(res.data);
     } catch (error) {
       console.error(error)
     }

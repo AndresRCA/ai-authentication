@@ -71,7 +71,7 @@ def user_session():
     return {"username": "asd"}
 
 
-@auth_bp.route("/users/photos/verify/<photo_data_url>", methods=["GET"])
+@auth_bp.route("/users/photos/verify/<photo_data_url>", methods=["GET"]) # /auth/users/photos/verify/<photo_data_url>
 def verify_user_photo(photo_data_url):
     # retrieve user from JWT value in cookies
     # user = ...
