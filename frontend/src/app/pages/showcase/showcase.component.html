@@ -1,14 +1,8 @@
-<main class="uk-flex uk-flex-middle uk-flex-between">
-  <!-- navigation arrows -->
-  <button class="navigation-arrow uk-margin-small-left fixed-left-arrow" [disabled]="currentAppIndex === 0" (click)="goToPreviousApp()">&lt;</button>
-  <button class="navigation-arrow uk-margin-small-right fixed-right-arrow" [disabled]="currentAppIndex === showcaseRoutes.length - 1" (click)="goToNextApp()">&gt;</button>
+<!-- navigation arrows -->
+<button class="navigation-arrow uk-margin-small-left fixed-left-arrow" [disabled]="currentAppIndex === 0" (click)="goToPreviousApp()">&lt;</button>
+<button class="navigation-arrow uk-margin-small-right fixed-right-arrow" [disabled]="currentAppIndex === showcaseRoutes.length - 1" (click)="goToNextApp()">&gt;</button>
 
-  <div></div>
-  <div [@routeAnimations]="getRouteAnimationData()">
-    <router-outlet></router-outlet>
-  </div>
-  <div></div>
+<!-- main content -->
+<main [@routeAnimations]="getRouteAnimationData()">
+  <router-outlet></router-outlet>
 </main>
-
-<!-- this right here is the layered waves we see in the page -->
-<!-- <div class="spacer image-layer"></div> -->

@@ -15,8 +15,7 @@ export class ErrorComponent {
   constructor(private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-    console.log(this.route.snapshot.queryParams['status_code']);
-    let statusCode: string | undefined = this.route.snapshot.queryParams['status_code'];
+    let statusCode: string | undefined = this.route.snapshot.queryParams['code'];
     if (!statusCode) return; // return and keep component default values
 
     this.statusCode = +statusCode; // convert string to number and assign (on Angular V16 this.statusCode would be a signal)

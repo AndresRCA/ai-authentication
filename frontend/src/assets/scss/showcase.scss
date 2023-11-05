@@ -7,7 +7,19 @@
 }
 
 .image-layer {
+  z-index: auto;
   background-image: url('../svgs/image-layer-900x300.svg');
+}
+
+.top-strip {
+  transform: scaleY(-1);
+  position: fixed;
+  top: 0px;
+}
+
+.bottom-strip {
+  position: fixed;
+  bottom: 0px;
 }
 
 .wrapper {
@@ -24,21 +36,33 @@
     color: #333333;
     font-size: 24px;
     font-weight: normal;
+    z-index: 999;
   }
-  
+
   .button-container {
     display: flex;
     justify-content: center;
     margin-top: 16px;
   }
-  
+
   .button {
     padding: 8px 16px;
     border-radius: 4px;
-    background-color: #4CAF50; /* Green */
+    background-color: #4CAF50;
+    /* Green */
     color: white;
+
     &:hover {
-      background-color: #3e8e41; /* Dark green */
+      background-color: #3e8e41;
+      /* Dark green */
+    }
+
+    &:disabled {
+      opacity: .65;
+
+      &:hover {
+        background-color: #4CAF50;
+      }
     }
   }
 }

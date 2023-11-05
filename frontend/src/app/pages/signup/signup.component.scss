@@ -1,0 +1,25 @@
+.image-container {
+  width: 420px; /* Set the desired width for the image container */
+  overflow: hidden; /* Hide any overflowing content */
+  img {
+    max-width: 100%; /* Ensure the image scales proportionally within the container */
+    height: auto; /* Allow the image to maintain its aspect ratio */
+  }
+  video {
+    max-width: 100%;
+    height: auto;
+    &.photo-invalid {
+      border: 1px solid red;
+    }
+  }
+}
+
+.image-clear-button {
+  background-color: #d8d8d88f;
+  width: 45px;
+  line-height: 46px;
+  padding: 0;
+  position: relative;
+  left: 400px;
+  bottom: 15px;
+}

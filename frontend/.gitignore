@@ -39,5 +39,5 @@ Thumbs.db
 
 # environment variables
 src/environments/*
-!src/environments/environment.ts.example
+!src/environments/environment.development.ts.example
 !src/environments/environment.prod.ts.example

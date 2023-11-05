@@ -8,8 +8,8 @@ import { VoiceComponent } from './pages/voice/voice.component';
  * can redirect intentionally)
  */
 export const showcaseRoutes: Routes = [
-  { path: 'image', component: ImageComponent, data: { animation: 0 } },
-  { path: 'voice', component: VoiceComponent, data: { animation: 1 } },
+  { path: 'image', title: 'Image', component: ImageComponent, data: { animation: 0 } },
+  { path: 'voice', title: 'Voice', component: VoiceComponent, data: { animation: 1 } },
 ];
 
 const routes: Routes = [

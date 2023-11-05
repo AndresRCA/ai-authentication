@@ -1,8 +1,28 @@
-/* You can add global styles to this file, and also import other style files */
-html, body {
-  background-color: #f2f2f2;
+/* global styles */
+
+html,
+body {
+  background: #f2f2f2;
   margin: 0;
   height: 100%;
+}
+
+/* form styles */
+form {
+  .uk-input {
+    transition: none;
+  }
+
+  .error-message {
+    color: red;
+    font-size: 14px;
+    margin-top: 5px;
+  }
+
+  /* Add styles to highlight invalid controls */
+  input.ng-dirty.ng-invalid {
+    border-color: red;
+  }
 }
 
 // global styles for ShowcaseComponent and any component used under the route /showcase

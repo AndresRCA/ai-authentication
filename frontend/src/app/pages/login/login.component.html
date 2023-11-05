@@ -1,0 +1,43 @@
+<div class="uk-container uk-flex uk-flex-center uk-flex-middle uk-height-viewport">
+  <div class="uk-card uk-card-default uk-card-body">
+    <h3 class="uk-card-title">Login</h3>
+    <form [formGroup]="form" (ngSubmit)="login()">
+      <div class="uk-margin">
+        <div class="uk-inline">
+          <span class="uk-form-icon" uk-icon="icon: user"></span>
+          <input
+            formControlName="username"
+            name="username"
+            class="uk-input"
+            type="text"
+            placeholder="Username"
+            required
+          >
+        </div>
+        <div class="error-message" *ngIf="form.controls['username'].invalid && form.controls['username'].dirty">
+          Username is required.
+        </div>
+      </div>
+      <div class="uk-margin">
+        <div class="uk-inline">
+          <span class="uk-form-icon" uk-icon="icon: lock"></span>
+          <input
+            formControlName="password"
+            name="password"
+            class="uk-input"
+            type="password"
+            placeholder="Password"
+            required
+          >
+        </div>
+        <div class="error-message" *ngIf="form.controls['password'].invalid && form.controls['password'].dirty">
+          Password is required.
+        </div>
+      </div>
+      <div class="uk-margin">
+        <button class="uk-button uk-button-primary uk-width-1-1" type="submit">Login</button>
+      </div>
+    </form>
+    <p>Don't have an account? <a routerLink="/signup">Sign up</a></p>
+  </div>
+</div>

@@ -10,6 +10,7 @@ import random
 import numpy as np
 from PIL import Image
 
+
 class SiameseNetworkDataset(Dataset):
     def __init__(self, imageFolderDataset, transform=None):
         self.imageFolderDataset = imageFolderDataset
