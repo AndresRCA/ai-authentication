@@ -1,4 +1,4 @@
-from sqlalchemy import UUID, String, text
+from sqlalchemy import UUID, String, Text, text
 from app.extensions import db
 
 
@@ -7,14 +7,14 @@ class User(db.Model):
     __table_args__ = {"schema": "auth"}
 
     id = db.Column(
-        UUID(as_uuid=True),
+        UUID(),
         primary_key=True,
         unique=True,
         nullable=False,
         server_default=text("gen_random_uuid()"),
     )
     username = db.Column(String(80), unique=True, nullable=False)
-    password = db.Column(String(80), nullable=False)
+    password = db.Column(String(255), nullable=False)
 
     # Define one-to-one relationship with UserImages
     photo = db.relationship(

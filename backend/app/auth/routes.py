@@ -1,5 +1,4 @@
-from typing import Optional
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request
 from .models.user import User
 from .models.user_photo import UserPhoto
 from app.extensions import db
@@ -12,7 +11,7 @@ auth_bp = Blueprint("auth", __name__)
 def login():
     data = request.get_json()
     if not data or "username" not in data or "password" not in data:
-        return jsonify({"error": "Invalid data provided"}), 400
+        return {"error": "Invalid data provided"}, 400
 
     username = data["username"]
     password = data["password"]
@@ -20,33 +19,36 @@ def login():
     # Check if the user exists in the database
     user = User.query.filter_by(username=username).first()
     if user:
-        return {"id": user.id, "username": user.username, "photo_file_name": user.photo.file_name}
         # check for password
         is_valid = AuthService.compare_passwords(user.password, password)
         if is_valid:
-            return user
-
-    return jsonify({"error": "Invalid username or password"}), 401
+            return {
+                "id": user.id,
+                "username": user.username,
+                "photo": {"id": user.photo.id, "file_name": user.photo.file_name},
+            }
+    else:
+        return {"error": "Invalid username or password"}, 401
 
 
 @auth_bp.route("/logout", methods=["POST"])
 def logout():
     # Your logout logic here
     # This could involve clearing the user's session, removing tokens, etc.
-    return jsonify({"message": "Logged out"})
+    return {"message": "Logged out"}
 
 
 @auth_bp.route("/signup", methods=["POST"])
 def signup():
     data = request.get_json()
     if not data or "username" not in data or "password" not in data:
-        return jsonify({"error": "Invalid data provided"}), 400
+        return {"error": "Invalid data provided"}, 400
 
     username = data["username"]
     existing_user = User.query.filter_by(username=username).first()
     if existing_user:
         return (
-            jsonify({"error": "Username already exists"}),
+            {"error": "Username already exists"},
             409,  # send "conflict" status code
         )
 
@@ -60,7 +62,11 @@ def signup():
     db.session.add(new_user)
     db.session.commit()
 
-    return new_user
+    return {
+        "id": new_user.id,
+        "username": new_user.username,
+        "photo": {"id": new_photo.photo.id, "file_name": new_photo.photo.file_name},
+    }
 
 
 @auth_bp.route("/users/verify-session", methods=["GET"])
@@ -81,5 +87,5 @@ def verify_user_photo():
     # build an image from photo_data_url or use the raw data to feed it into the ML model
     # feed user_photo and photo_data_url into the ML model to start the comparison
     # ...
-    
+
     return {"message": "user is the same person"}
