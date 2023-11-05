@@ -1,12 +1,8 @@
-/* variables */
-// theme
-$main-theme-color: #302936;
-$main-theme-color-gradient: linear-gradient(135deg, #302936, #332940);
-
 /* global styles */
-html, body {
-  color: #fff;
-  background: $main-theme-color-gradient; // background-color: #f2f2f2;
+
+html,
+body {
+  background: #f2f2f2;
   margin: 0;
   height: 100%;
 }
@@ -22,7 +18,7 @@ form {
     font-size: 14px;
     margin-top: 5px;
   }
-  
+
   /* Add styles to highlight invalid controls */
   input.ng-dirty.ng-invalid {
     border-color: red;

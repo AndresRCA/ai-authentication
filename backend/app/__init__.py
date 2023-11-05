@@ -43,8 +43,10 @@ def create_app():
 
     # start database
     db.init_app(app)
-    with app.app_context():
-        db.create_all()
+    if FLASK_ENV == "development":
+        # try to create tables only in development
+        with app.app_context():
+            db.create_all()
 
     # Register Blueprints
     app.register_blueprint(app_bp)
