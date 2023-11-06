@@ -3,10 +3,11 @@
   <h1 class="app-title">Camera</h1>
   
   <!-- image source -->
-  <video #videoEl autoplay muted width="720" height="560"></video>
+  <app-face-recognition-webcam #faceRecognitionWebcam></app-face-recognition-webcam>
+  <!-- <video #videoEl autoplay muted width="720" height="560"></video> -->
 
   <div class="button-container">
-    <button class="button" (click)="takePhoto()" [disabled]="isPhotoTakeable()">Take photo</button>
+    <button class="button" (click)="takePhoto()" [disabled]="faceRecognitionWebcam.isPhotoTakeable()">Take photo</button>
   </div>
 </div>
 <div class="spacer image-layer bottom-strip"></div>
