@@ -13,6 +13,7 @@ import { LoginComponent } from './pages/login/login.component';
 import { SignupComponent } from './pages/signup/signup.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ConfigurationService } from './services/configuration.service';
+import { SharedModule } from './shared/shared.module';
 
 function initializeApp(configurationService: ConfigurationService) {
   return () => configurationService.loadConfigurationData();
@@ -29,6 +30,7 @@ function initializeApp(configurationService: ConfigurationService) {
   ],
   imports: [
     CoreModule,
+    SharedModule,
     FormsModule,
     ReactiveFormsModule,
     BrowserModule,

@@ -52,26 +52,27 @@
         <div class="uk-margin">
           <!-- Video element for webcam feed -->
           <div class="image-container">
-            <video #webcamVideo [class.photo-invalid]="form.controls['photo'].invalid && form.controls['photo'].dirty" autoplay muted></video>
+            <app-face-recognition-webcam [class.photo-invalid]="form.controls['photo'].invalid && form.controls['photo'].dirty"></app-face-recognition-webcam>
           </div>
         </div>
         <div class="uk-margin">
           <!-- Button to capture photo from webcam -->
-          <button type="button" class="uk-button uk-button-primary" (click)="captureWebcamPhoto()">Take a Picture</button>
+          <button type="button" class="uk-button uk-button-primary" (click)="captureWebcamPhoto()" [disabled]="isPhotoTakeable()">Take a Picture</button>
         </div>
       </div>
 
-      <div class="uk-margin">
+      <div class="uk-margin" style="margin-bottom: 30px;" *ngIf="photoDataUrl">
         <!-- Image preview -->
         <div class="image-preview">
           <div class="image-container">
-            <img [src]="photoDataUrl" alt="Selected Image" *ngIf="photoDataUrl">
+            <img [src]="photoDataUrl" alt="Selected Image">
+            <button style="position: absolute; bottom: -22px;" title="clear image" class="uk-button uk-border-circle uk-box-shadow-small image-clear-button" type="button" (click)="clearImage()">
+              <span uk-icon="icon: close"></span>
+            </button>
           </div>
-          <button title="clear image" class="uk-button uk-border-circle uk-box-shadow-small image-clear-button" type="button" (click)="clearImage()" *ngIf="photoDataUrl">
-            <span uk-icon="icon: close"></span>
-          </button>
         </div>
       </div>
+      
       <div class="uk-margin">
         <button class="uk-button uk-button-primary uk-width-1" type="submit">Sign Up</button>
       </div>

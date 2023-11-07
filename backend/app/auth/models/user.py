@@ -1,4 +1,4 @@
-from sqlalchemy import UUID, String, Text, text
+from sqlalchemy import UUID, String, text
 from app.extensions import db
 
 

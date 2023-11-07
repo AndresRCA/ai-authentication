@@ -1,16 +1,16 @@
 .image-container {
-  width: 420px; /* Set the desired width for the image container */
-  overflow: hidden; /* Hide any overflowing content */
+  position: relative;
+  width: 420px; // Set the desired width for the image container
+
   img {
-    max-width: 100%; /* Ensure the image scales proportionally within the container */
-    height: auto; /* Allow the image to maintain its aspect ratio */
+    position: relative;
+    max-width: 100%; // Ensure the image scales proportionally within the container
+    height: auto; // Allow the image to maintain its aspect ratio
   }
+  
   video {
     max-width: 100%;
     height: auto;
-    &.photo-invalid {
-      border: 1px solid red;
-    }
   }
 }
 
@@ -20,6 +20,11 @@
   line-height: 46px;
   padding: 0;
   position: relative;
-  left: 400px;
-  bottom: 15px;
+  left: 226px;
+  bottom: 22px;
+}
+
+// apply this style to the video element inside the child components such was the webcam video feed used in this signup component
+:host ::ng-deep .photo-invalid video {
+  border: 1px solid red;
 }

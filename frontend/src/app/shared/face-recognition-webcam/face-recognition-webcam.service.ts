@@ -2,10 +2,10 @@ import { Injectable, OnDestroy, signal } from '@angular/core';
 import * as faceapi from 'face-api.js';
 
 /**
- * Transient (non-singleton) service for face recognition
+ * Service used for the logic and processes used in the face recognition webcam component
  */
 @Injectable()
-export class FaceRecognitionService implements OnDestroy {
+export class FaceRecognitionWebcamService implements OnDestroy {
 
   private faceDetectionInterval: NodeJS.Timer | undefined;
   /**
@@ -19,7 +19,7 @@ export class FaceRecognitionService implements OnDestroy {
     this.stopFaceDetection();
   }
 
-  async loadModels() {
+  public async loadModels() {
     await faceapi.nets.tinyFaceDetector.loadFromUri('../../../assets/models');
   }
 
@@ -28,10 +28,15 @@ export class FaceRecognitionService implements OnDestroy {
    * box on top of the video feed provided
    * @param video 
    */
-  startDetectingFaces(video: HTMLVideoElement) {
+  public startDetectingFaces(video: HTMLVideoElement) {
     // Create a canvas element to display face detections based on the video feed
     const canvas = faceapi.createCanvasFromMedia(video);
+    // Apply CSS rules to position the canvas over the video element
+    canvas.style.position = 'absolute';
+    canvas.style.left = '0';
+    canvas.style.zIndex = '2';
     video.parentElement?.append(canvas);
+
     const displaySize = { width: video.width, height: video.height };
     faceapi.matchDimensions(canvas, displaySize);
 
