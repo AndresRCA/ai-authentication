@@ -66,8 +66,3 @@
     }
   }
 }
-
-canvas {
-  position: absolute;
-  z-index: 998; // should appear behind buttons with z-index: 999
-}

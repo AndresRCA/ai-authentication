@@ -1,4 +1,4 @@
-import { Component, ElementRef, Injector, OnInit, ViewChild, effect, signal } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, Injector, OnInit, ViewChild, effect, signal } from '@angular/core';
 import { AbstractControl, FormBuilder, ValidatorFn, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AbstractFormBase } from 'src/abstract-classes/form-base.abstract';
@@ -6,6 +6,7 @@ import { IUser } from 'src/app/core/interfaces/IUser.interface';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { ErrorHandlerService } from 'src/app/core/services/error-handler.service';
 import { WebcamService } from 'src/app/core/transient-services/webcam.service';
+import { FaceRecognitionWebcamComponent } from 'src/app/shared/face-recognition-webcam/face-recognition-webcam.component';
 import { v4 as uuidv4 } from 'uuid';
 
 /**
@@ -15,9 +16,9 @@ import { v4 as uuidv4 } from 'uuid';
  * @returns 
  */
 function matchValidator(matchingControlName: string): ValidatorFn {
-  return (control: AbstractControl): {[key: string]: any} | null => {
+  return (control: AbstractControl): { [key: string]: any } | null => {
     const matchingControlValue = control.parent?.get(matchingControlName)?.value;
-    
+
     if (control.value === matchingControlValue) {
       return null; // Passwords match, return null for no error
     } else {
@@ -41,20 +42,19 @@ export class SignupComponent extends AbstractFormBase implements OnInit {
   // Property to hold the unique name of the image taken by the webcam
   private webcamPhotoName = signal<string | null>(null);
 
-  // Reference to video element for the webcam feed
-  @ViewChild('webcamVideo') webcamVideoEl!: ElementRef<HTMLVideoElement>;
+  @ViewChild(FaceRecognitionWebcamComponent) faceRecognitionWebcam?: FaceRecognitionWebcamComponent;
 
   constructor(
     private injector: Injector, // used to declare a function used as an effect for signals
+    private cd: ChangeDetectorRef,
     private fb: FormBuilder,
     private router: Router,
     private authService: AuthService,
-    private webcamService: WebcamService,
     private errorHandlerService: ErrorHandlerService
   ) {
     super();
   }
-  
+
   ngOnInit(): void {
     this.form = this.fb.group(
       {
@@ -64,7 +64,7 @@ export class SignupComponent extends AbstractFormBase implements OnInit {
         photo: ['', Validators.required] // This will hold the uploaded photo's path, use it to store the name of the file
       }
     );
-    
+
     // when the value of password changes, check for the validity of confirmPassword
     this.form.controls['password'].valueChanges.subscribe(() => {
       this.form.controls['confirmPassword'].updateValueAndValidity();
@@ -94,7 +94,7 @@ export class SignupComponent extends AbstractFormBase implements OnInit {
    * Function to handle displaying and storing the selected image
    * @param event 
    */
-  displaySelectedImage(event: any): void {
+  public displaySelectedImage(event: any): void {
     const file = event.target.files[0];
     if (file) {
       const reader = new FileReader();
@@ -109,35 +109,28 @@ export class SignupComponent extends AbstractFormBase implements OnInit {
     }
   }
 
-  /**
-   * Function to toggle webcam visibility
-   */
-  async toggleWebcam(): Promise<void> {
+  public toggleWebcam() {
     this.showWebcam = !this.showWebcam;
-
-    if (this.showWebcam) {
-      // If showing webcam, start capturing the video stream
-      try {
-        const stream = await this.webcamService.getMediaStream();
-        this.webcamVideoEl.nativeElement.srcObject = stream;
-      } catch (error) {
-        console.error('Error starting webcam.', error);
-      }
-    } else {
-      // If hiding webcam, stop the video stream
-      this.webcamService.stopWebcam();
-    }
+    // solution for this https://angular.io/errors/NG0100
+    this.cd.detectChanges();
   }
 
-  /**
-   * Function to capture a photo from the webcam
-   */
-  async captureWebcamPhoto() {
+  public isPhotoTakeable() {
+    return this.faceRecognitionWebcam?.isPhotoTakeable() || false;
+  }
+  
+  public async captureWebcamPhoto() {
     try {
-      const photoDataUrl = await this.webcamService.captureWebcamPhoto(this.webcamVideoEl.nativeElement);
+      if (!this.faceRecognitionWebcam) {
+        throw new Error('Unknown error occurred. Could not find a webcam element.', { cause: this.faceRecognitionWebcam });
+      }
+
+      const canvas = await this.faceRecognitionWebcam.getPictureOfFace();
+      const photoDataUrl = canvas.toDataURL();
+
       // Set the captured photo URL
       this.photoDataUrl = photoDataUrl;
-    
+
       // Generate a unique string for the photo name that will be sent to the server
       const uniqueFileName = `${uuidv4()}_${new Date().toISOString()}`;
       this.webcamPhotoName.set(uniqueFileName);
@@ -153,13 +146,13 @@ export class SignupComponent extends AbstractFormBase implements OnInit {
    * Set the preview image source to `null` and empties the <input type="file">'s value as well as every other property
    * used to store the image's properties
    */
-  clearImage(): void {
+  public clearImage(): void {
     this.photoDataUrl = null;
     if (this.webcamPhotoName()) this.webcamPhotoName.set(null);
     if (this.form.controls['photo'].value) this.form.controls['photo'].setValue('');
   }
 
-  signUp(): void {
+  public signUp(): void {
     if (this.form.invalid || !this.photoDataUrl) {
       this.displayValidationErrors();
       return;
@@ -178,7 +171,7 @@ export class SignupComponent extends AbstractFormBase implements OnInit {
       console.error('Unexpected error has ocurred.')
       return;
     }
-    
+
     // const fileName = this.extractFileName(photo);
     const photoDataUrl = this.photoDataUrl!
     const newUser = {
@@ -193,7 +186,7 @@ export class SignupComponent extends AbstractFormBase implements OnInit {
       .then((createdUser: IUser) => {
         // set the newly created user to the service
         this.authService.initUser(createdUser);
-        
+
         // show a notification of success (use a modal instead later)
         alert('New user was successfully created');
         this.router.navigateByUrl('/showcase');

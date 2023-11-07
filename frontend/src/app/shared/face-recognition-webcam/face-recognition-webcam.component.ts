@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild, computed } from '@angular/core';
+import { Component, ElementRef, OnDestroy, ViewChild, computed } from '@angular/core';
 import { WebcamService } from 'src/app/core/transient-services/webcam.service';
 import { FaceRecognitionWebcamService } from './face-recognition-webcam.service';
 
@@ -11,7 +11,7 @@ import { FaceRecognitionWebcamService } from './face-recognition-webcam.service'
     FaceRecognitionWebcamService // this component's service for background logic
   ]
 })
-export class FaceRecognitionWebcamComponent {
+export class FaceRecognitionWebcamComponent implements OnDestroy {
   @ViewChild('videoEl') videoEl!: ElementRef<HTMLVideoElement>;
   /**
    * Photo is takeable when our face recognition service recognizes and has a face in storage
@@ -30,6 +30,11 @@ export class FaceRecognitionWebcamComponent {
     } catch (error) {
       console.error(error);
     }
+  }
+
+  ngOnDestroy(): void {
+    // this.webcamService.stopWebcam();
+    // throw new Error('Method not implemented.');
   }
 
   /**

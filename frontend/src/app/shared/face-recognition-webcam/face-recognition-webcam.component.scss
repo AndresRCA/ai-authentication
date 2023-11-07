@@ -1,4 +1,20 @@
+:host {
+  position: relative;
+}
+
 video {
   box-shadow: 0px 0px 16px rgba(0, 0, 0, 0.25);
   border-radius: 8px;
+  position: relative;
+  z-index: 1;
 }
+
+// This style is inserted when the face recognition service runs... Even if i 
+
+/* This style is inserted programatically when the face recognition service runs...
+   Even if I declare it here it won't be applied */
+// canvas {
+//   position: absolute;
+//   left: 0;
+//   z-index: 2;
+// }

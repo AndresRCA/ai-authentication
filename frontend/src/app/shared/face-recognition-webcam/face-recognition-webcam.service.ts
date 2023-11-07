@@ -31,8 +31,11 @@ export class FaceRecognitionWebcamService implements OnDestroy {
   public startDetectingFaces(video: HTMLVideoElement) {
     // Create a canvas element to display face detections based on the video feed
     const canvas = faceapi.createCanvasFromMedia(video);
-    // place the canvas element right below '<app-face-recognition-webcam></app-face-recognition-webcam>'
-    video.parentElement?.parentElement?.append(canvas);
+    // Apply CSS rules to position the canvas over the video element
+    canvas.style.position = 'absolute';
+    canvas.style.left = '0';
+    canvas.style.zIndex = '2';
+    video.parentElement?.append(canvas);
 
     const displaySize = { width: video.width, height: video.height };
     faceapi.matchDimensions(canvas, displaySize);
