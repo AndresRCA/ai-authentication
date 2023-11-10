@@ -7,8 +7,5 @@ config.py
 config_dev.py
 config_prod.py
 
-# build from frontend
-dist/
-
 # other
 rest.http

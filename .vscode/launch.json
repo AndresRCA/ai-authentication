@@ -10,7 +10,7 @@
       "request": "launch",
       "module": "flask",
       "env": {
-        "FLASK_APP": "${workspaceFolder}/backend/app" // this overwrites the value in .env, a needed measure to run debug
+        "FLASK_APP": "${workspaceFolder}/backend/app.app" // this overwrites the value in .env, a needed measure to run debug
       },
       "envFile": "${workspaceFolder}/backend/.env",
       "args": [
