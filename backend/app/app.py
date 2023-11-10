@@ -28,6 +28,12 @@ def load_prod_config(app: Flask):
     app.config.from_object("config_prod.Config")
     # allow requests only from the specified domain
     CORS(app, resources={r"*": {"origins": os.getenv("APP_DOMAIN")}})
+
+    # Register middleware when using a proxy such as nginx: https://flask.palletsprojects.com/en/3.0.x/deploying/proxy_fix/
+    from werkzeug.middleware.proxy_fix import ProxyFix
+
+    app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_prefix=1)
+
     return app
 
 
