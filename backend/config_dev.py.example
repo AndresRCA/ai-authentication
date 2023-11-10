@@ -1,3 +1,5 @@
+import os
+
 class Config:
     """
     Class used for configurating the flask app object. Each property represents a key used in the configuration 
@@ -5,9 +7,7 @@ class Config:
     """
     DEBUG = True # fixed value
     # database
-    SQLALCHEMY_DATABASE_URI = (
-        "postgresql://username:password@localhost/database_name"
-    )
+    SQLALCHEMY_DATABASE_URI = f"postgresql://{os.getenv('POSTGRES_USER')}:{os.getenv('POSTGRES_PASSWORD')}@localhost/{os.getenv('POSTGRES_DB')}"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     # secret key for cookies
-    SECRET_KEY = "secret-key"
+    SECRET_KEY = os.getenv("COOKIE_SECRET_KEY")

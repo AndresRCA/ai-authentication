@@ -1,0 +1,31 @@
+services:
+  website:
+    build: ./frontend
+    ports:
+      - 3000:80
+      - 3001:443
+
+  flask-app:
+    build: ./backend
+    env_file:
+      - ./backend/.env
+    ports:
+      - 5000:5000
+
+  database:
+    image: postgres:14.9-alpine
+    healthcheck: # healthcheck is used to make sure Postgres is running before other services that depend on it can run.
+      test: [ "CMD", "pg_isready", "-q", "-d", "postgres", "-U", "root" ]
+      timeout: 45s
+      interval: 10s
+      retries: 10
+    env_file:
+      - ./backend/.env
+    ports:
+      - 5432:5432
+    volumes:
+      - ai_auth_postgres:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+  
+volumes:
+  ai_auth_postgres:
