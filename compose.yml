@@ -11,11 +11,13 @@ services:
       - ./backend/.env
     ports:
       - 5000:5000
+    depends_on:
+      - database
 
   database:
     image: postgres:14.9-alpine
     healthcheck: # healthcheck is used to make sure Postgres is running before other services that depend on it can run.
-      test: [ "CMD", "pg_isready", "-q", "-d", "postgres", "-U", "root" ]
+      test: [ "CMD", "pg_isready", "-q", "-U", "${POSTGRES_USER}" ]
       timeout: 45s
       interval: 10s
       retries: 10
