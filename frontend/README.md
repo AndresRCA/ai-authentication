@@ -2,6 +2,10 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.0.1.
 
+## Setup
+
+1. Copy the `environment.development.ts.example` and `environment.ts.example` files, then remove the `.example` suffix from them and add the values you see fit to use in this flask app. In case of doubt use the default values.
+
 ## Development policies (**IMPORTANT TO FOLLOW**)
 
 * File naming (and other types of naming): This project generally follows the rules proposed by angular themselves [here](https://angular.io/guide/styleguide#naming), so **please** do give the guidelines a glance, there's reasons for why following a convention and keeping consistency does great work for the team.

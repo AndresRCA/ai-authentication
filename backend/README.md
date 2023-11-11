@@ -1,6 +1,6 @@
 # AI Authentication Backend
 
-## Installation
+## Setup
 
 1. Create a Postgres database called `ai_authentication`.
 2. Install the `pgcrypto` extension for that database.
