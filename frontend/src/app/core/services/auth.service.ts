@@ -57,17 +57,12 @@ export class AuthService {
   }
 
   /**
-   * Sends a request to check if session is still active for this user
-   * HTTP response should either be 200(OK) or 403(Forbidden)
+   * Checks if user exists in this app.
    * @returns boolean which determines if the user session is still active
    */
   public async isUserSessionActive(): Promise<boolean> {
-    try {
-      await this.apiClientService.http.get('/auth/session/check-session');
-      return true;
-    } catch (error) {
-      return false;
-    }
+    // this.user should be only declared if the user previously authenticated themselves
+    return (this.user !== undefined)
   }
 
   /**
